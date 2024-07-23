@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
 using TMPro;
+using UnityEngine.UI;
 
 public class HearthstoneAPIManager : MonoBehaviour {
     private static HearthstoneAPIManager _instance;
@@ -46,6 +47,9 @@ public class HearthstoneAPIManager : MonoBehaviour {
 
     [SerializeField]
     private DeckResponse _deckResponse;
+
+    [SerializeField]
+    private Image _image;
 
     public void CreateDeck() {
         this.StartCoroutine(this.RequestDeck());
@@ -89,58 +93,58 @@ public class HearthstoneAPIManager : MonoBehaviour {
         }
     }
 
-    private IEnumerator RequestDraw() {
-        string url = this._baseURL + this._deckID + "/draw";
-        using(UnityWebRequest request = new UnityWebRequest(url, "GET")) {//using whatever is in braces 
+    private IEnumerator RequestDraw()
+    {
+        string url = _baseURL + "cards/sets/Basic";
+
+        using (UnityWebRequest request = UnityWebRequest.Get(url))
+        {
             request.downloadHandler = new DownloadHandlerBuffer();
             yield return request.SendWebRequest();
+
             Debug.Log($"Response Code : {request.responseCode}");
             Debug.Log($"Json Response : {request.downloadHandler.text}");
 
-            if(string.IsNullOrEmpty(request.error)) {
+            if (string.IsNullOrEmpty(request.error))
+            {
                 Debug.Log($"Response : {request.downloadHandler.text}");
 
                 DrawResponse response = JsonConvert.DeserializeObject<DrawResponse>(request.downloadHandler.text);
-                if(response.Success) {
-                    Card chosenMinion = this.Clean(response);
-                    string imageURL = chosenMinion.Image;
-                    //imageURL = "https://deckofcardsapi.com/static/img/6H.png";
+                if (response.Success)
+                {
+                    //string imageURL = response.Cards[0].Image;
+                    string imageURL = _baseTextureURL + "BG_CS2_200_G" + ".png";
                     Debug.Log("[IMAGE] : " + imageURL);
-                    this.StartCoroutine(this.DownloadTexture(imageURL));
-                    this._name.text = chosenMinion.MinionDatas.Name;
-                    this._attack.text = chosenMinion.MinionDatas.Attack.ToString();
-                    this._health.text = chosenMinion.MinionDatas.Health.ToString();
+                    StartCoroutine(DownloadTexture(imageURL));
                 }
             }
-            else {
+            else
+            {
                 Debug.Log("Error : " + request.error);
             }
         }
     }
 
-    private IEnumerator DownloadTexture(string url) {
-        UnityWebRequest request = UnityWebRequestTexture.GetTexture(url);
-        yield return request.SendWebRequest();
 
-        if(request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError) {
-            Debug.Log("Your code serves ZERO purpose. You should delete gameObject NOW.");
-        }
-        else {
-            DownloadHandlerTexture response = (DownloadHandlerTexture)request.downloadHandler;
-            Texture texture = response.texture;
-            this._cardObj1.GetComponent<Renderer>().material.mainTexture = texture;
-            
-            //this._cardObj.GetComponent<Renderer>().material.SetTexture("_MainTex", texture);
+    private IEnumerator DownloadTexture(string url)
+    {
+        using (UnityWebRequest request = UnityWebRequestTexture.GetTexture(url))
+        {
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+            {
+                Debug.Log("Error downloading texture: " + request.error);
+            }
+            else
+            {
+                DownloadHandlerTexture response = (DownloadHandlerTexture)request.downloadHandler;
+                Texture2D texture = response.texture;
+                Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+                _image.sprite = sprite;
+            }
         }
     }
-
-    //private IEnumerator Request() {
-    //    string url = this._baseURL + this._deckID + "/draw";
-    //    using(UnityWebRequest request = new UnityWebRequest(url, "GET")) {
-    //        request.SetRequestHeader("X-RapidAPI-Key", this._apiKey);
-    //        request.SetRequestHeader("X-RapidAPI-Host", this._apiHost);
-    //    }
-    //}
 
     Card Clean(DrawResponse response) {
         //filter so we only get json files with type minion
