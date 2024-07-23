@@ -99,8 +99,8 @@ public class HearthstoneAPIManager : MonoBehaviour {
 
         using (UnityWebRequest request = UnityWebRequest.Get(url))
         {
-            request.SetRequestHeader("X-RapidAPI-Key", _apiKey);
-            request.SetRequestHeader("X-RapidAPI-Host", _apiHost);
+            request.SetRequestHeader("x-rapidapi-key", _apiKey);
+            request.SetRequestHeader("x-rapidapi-host", _apiHost);
             request.downloadHandler = new DownloadHandlerBuffer();
             yield return request.SendWebRequest();
 
