@@ -8,6 +8,9 @@ public class Card : MonoBehaviour {
     [JsonProperty("code")]
     public string Code { get; set; }
 
+    [JsonProperty("cardID")]
+    public string CardID { get; set; }
+
     [JsonProperty("image")]
     public string Image { get; set; }
     
