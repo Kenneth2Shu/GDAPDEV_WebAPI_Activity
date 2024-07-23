@@ -1485,7 +1485,7 @@ MonoBehaviour:
   _apiHost: omgvamp-hearthstone-v1.p.rapidapi.com
   _apiKey: 
   _deckID: 
-  _cardObj1: {fileID: 0}
+  _cardObj1: {fileID: 1724436138}
   _drawResponse: {fileID: 0}
   _deckResponse: {fileID: 0}
 --- !u!4 &1936429664
