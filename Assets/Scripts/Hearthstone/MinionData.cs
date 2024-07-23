@@ -2,6 +2,9 @@ using Newtonsoft.Json;
 
 [JsonObject(MemberSerialization.OptIn)]
 public class MinionData {
+    [JsonProperty("code")]
+    public string Code { get; set; }
+    
     [JsonProperty("cardId")]
     public string CardId;
 
