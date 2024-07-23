@@ -66,12 +66,9 @@ public class HearthstoneAPIManager : MonoBehaviour {
     }
 
     public void Draw() {
+        this.StartCoroutine(this.Reshuffle());
         Debug.Log(this._deckResponse._remaining);
-        if(this._deckResponse._remaining < 3) {
-            Debug.LogWarning("Not enough cards remaining, reshuffling...");
-            this.StartCoroutine(this.Reshuffle());
-        }
-        this.StartCoroutine(this.RequestDraw(1));
+        this.StartCoroutine(this.RequestDraw());
     }
 
     private IEnumerator Reshuffle() {
@@ -82,7 +79,7 @@ public class HearthstoneAPIManager : MonoBehaviour {
         }
     }
 
-    private IEnumerator RequestDraw(int nNum) {
+    private IEnumerator RequestDraw() {
         string url = this._baseURL + this._deckID + "/draw";
         using(UnityWebRequest request = new UnityWebRequest(url, "GET")) {//using whatever is in braces 
             request.downloadHandler = new DownloadHandlerBuffer();
@@ -98,7 +95,7 @@ public class HearthstoneAPIManager : MonoBehaviour {
                     string imageURL = response.Cards[0].Image;
                     //imageURL = "https://deckofcardsapi.com/static/img/6H.png";
                     Debug.Log("[IMAGE] : " + imageURL);
-                    this.StartCoroutine(this.DownloadTexture(imageURL, nNum));
+                    this.StartCoroutine(this.DownloadTexture(imageURL));
                 }
             }
             else {
@@ -107,7 +104,7 @@ public class HearthstoneAPIManager : MonoBehaviour {
         }
     }
 
-    private IEnumerator DownloadTexture(string url, int nNum) {
+    private IEnumerator DownloadTexture(string url) {
         UnityWebRequest request = UnityWebRequestTexture.GetTexture(url);
         yield return request.SendWebRequest();
 
