@@ -99,6 +99,8 @@ public class HearthstoneAPIManager : MonoBehaviour {
 
         using (UnityWebRequest request = UnityWebRequest.Get(url))
         {
+            request.SetRequestHeader("X-RapidAPI-Key", _apiKey);
+            request.SetRequestHeader("X-RapidAPI-Host", _apiHost);
             request.downloadHandler = new DownloadHandlerBuffer();
             yield return request.SendWebRequest();
 
@@ -112,7 +114,6 @@ public class HearthstoneAPIManager : MonoBehaviour {
                 DrawResponse response = JsonConvert.DeserializeObject<DrawResponse>(request.downloadHandler.text);
                 if (response.Success)
                 {
-                    //string imageURL = response.Cards[0].Image;
                     string imageURL = _baseTextureURL + "BG_CS2_200_G" + ".png";
                     Debug.Log("[IMAGE] : " + imageURL);
                     StartCoroutine(DownloadTexture(imageURL));
