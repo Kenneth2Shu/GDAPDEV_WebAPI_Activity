@@ -13,4 +13,7 @@ public class Card : MonoBehaviour {
     
     [JsonProperty("images")]
     public Images Images { get; set; }
+
+    [JsonProperty("minionData")]
+    public MinionData MinionDatas { get; set; }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
+using TMPro;
 
 public class HearthstoneAPIManager : MonoBehaviour {
     private static HearthstoneAPIManager _instance;
@@ -30,6 +31,15 @@ public class HearthstoneAPIManager : MonoBehaviour {
 
     [SerializeField]
     private GameObject _cardObj1;
+
+    [SerializeField]
+    private TMP_Text _name;
+
+    [SerializeField]
+    private TMP_Text _attack;
+
+    [SerializeField]
+    private TMP_Text _health;
 
     [SerializeField]
     private DrawResponse _drawResponse;
@@ -92,10 +102,14 @@ public class HearthstoneAPIManager : MonoBehaviour {
 
                 DrawResponse response = JsonConvert.DeserializeObject<DrawResponse>(request.downloadHandler.text);
                 if(response.Success) {
-                    string imageURL = response.Cards[0].Image;
+                    Card chosenMinion = this.Clean(response);
+                    string imageURL = chosenMinion.Image;
                     //imageURL = "https://deckofcardsapi.com/static/img/6H.png";
                     Debug.Log("[IMAGE] : " + imageURL);
                     this.StartCoroutine(this.DownloadTexture(imageURL));
+                    this._name.text = chosenMinion.MinionDatas.Name;
+                    this._attack.text = chosenMinion.MinionDatas.Attack.ToString();
+                    this._health.text = chosenMinion.MinionDatas.Health.ToString();
                 }
             }
             else {
@@ -128,9 +142,22 @@ public class HearthstoneAPIManager : MonoBehaviour {
     //    }
     //}
 
-    //List<> Clean(List<json object> response) {
+    Card Clean(DrawResponse response) {
         //filter so we only get json files with type minion
-    //}
+        bool isMinion = false;
+        Card chosenMinion = new Card();
+
+        for(int i = 0; i < response.MinionDatas.Count || isMinion == false; i++) {
+            if(response.MinionDatas[i].Type == "Minion") {
+                isMinion = true;
+                chosenMinion.MinionDatas = response.MinionDatas[i];
+                chosenMinion.Code = response.MinionDatas[i].Code;
+                chosenMinion.Image = response.Image[i];
+            }
+        }
+
+        return chosenMinion;
+    }
 
 
     void Awake() {

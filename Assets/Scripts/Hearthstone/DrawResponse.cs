@@ -13,8 +13,17 @@ public class DrawResponse : MonoBehaviour {
     [JsonProperty("cards")]
     public List<Card> Cards { get; set; }
 
+    [JsonProperty("minionData")]
+    public List<MinionData> MinionDatas { get; set; }
+
+    [JsonProperty("image")]
+    public List<string> Image { get; set; }
+
     [JsonProperty("remaining")]
     public int Remaining { get; set; }
+
+    [JsonProperty("type")]
+    public string Type { get; set; }
 
 
     // Start is called before the first frame update
