@@ -6,26 +6,16 @@ public class Controller : MonoBehaviour {
     [SerializeField]
     private bool runCreateDeck = false;
 
-    [SerializeField]
-    private bool runDrawCard = false;
-
-
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        
+        HearthstoneAPIManager.Instance.CreateDeck();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if(runCreateDeck) {
             runCreateDeck = false;
             HearthstoneAPIManager.Instance.CreateDeck();
-        }
-        if(runDrawCard) {
-            runDrawCard = false;
-            HearthstoneAPIManager.Instance.Draw();
         }
     }
 }

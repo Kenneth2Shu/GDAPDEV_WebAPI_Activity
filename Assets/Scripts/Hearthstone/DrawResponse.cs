@@ -3,38 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 
-public class DrawResponse : MonoBehaviour {
-    [JsonProperty("success")]
-    public bool Success { get; set; }
+public class DrawResponse
+{
+    [JsonProperty("cardId")]
+    public string CardId { get; set; }
 
-    [JsonProperty("deck_ID")]
-    public string DeckID { get; set; }
+    [JsonProperty("dbfId")]
+    public int DbfId { get; set; }
 
-    [JsonProperty("cards")]
-    public List<Card> Cards { get; set; }
+    [JsonProperty("name")]
+    public string Name { get; set; }
 
-    [JsonProperty("minionData")]
-    public List<MinionData> MinionDatas { get; set; }
+    [JsonProperty("attack")]
+    public int Attack { get; set; }
 
-    [JsonProperty("image")]
-    public List<string> Image { get; set; }
-
-    [JsonProperty("remaining")]
-    public int Remaining { get; set; }
+    [JsonProperty("health")]
+    public int Health { get; set; }
 
     [JsonProperty("type")]
     public string Type { get; set; }
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
