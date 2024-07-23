@@ -5,8 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class SceneSwitcher : MonoBehaviour
 {
-    public void SwitchScene()
+    public void SwtichToCardScene()
     {
         SceneManager.LoadScene("CardScene");
+    }
+
+    public void SwitchToPlayScene()
+    {
+        SceneManager.LoadScene("PlayScene");
     }
 }
