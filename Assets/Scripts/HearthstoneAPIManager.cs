@@ -23,7 +23,7 @@ public class HearthstoneAPIManager : MonoBehaviour {
     private string _apiHost = "omgvamp-hearthstone-v1.p.rapidapi.com";
 
     [SerializeField]
-    private string _apiKey;
+    private string _apiKey = "86293ce88cmshf00e9dde1570aafp1efd59jsn85cf2b617e6a";
 
     [SerializeField]
     private string _deckID;
