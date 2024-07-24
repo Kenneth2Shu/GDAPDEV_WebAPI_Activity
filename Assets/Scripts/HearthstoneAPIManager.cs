@@ -38,6 +38,12 @@ public class HearthstoneAPIManager : MonoBehaviour {
     [SerializeField]
     private Image _image;
 
+    [SerializeField]
+    private string _currentImageURL;
+
+    [SerializeField]
+    private Sprite _cardBack;
+
     public void CreateDeck()
     {
         this.StartCoroutine(this.RequestDeck());
@@ -68,6 +74,7 @@ public class HearthstoneAPIManager : MonoBehaviour {
                 {
                     DrawResponse randomMinion = minionCards[Random.Range(0, minionCards.Count)];
                     string imageURL = _baseTextureURL + randomMinion.CardId + ".png";
+                    this._currentImageURL = imageURL;
                     Debug.Log("[IMAGE] : " + imageURL);
                     StartCoroutine(DownloadTexture(imageURL));
 
@@ -104,6 +111,18 @@ public class HearthstoneAPIManager : MonoBehaviour {
                 Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
                 _image.sprite = sprite;
             }
+        }
+    }
+
+    public void FlipCard(string strSide) {
+        if(strSide == "front" && this._currentImageURL != null) {
+            this.StartCoroutine(this.DownloadTexture(this._currentImageURL));
+        }
+        else if(strSide == "back" && this._cardBack != null) {
+            this._image.sprite = this._cardBack;
+        }
+        else {
+            Debug.LogWarning("You sure you spelled that right, bruv?");
         }
     }
 
